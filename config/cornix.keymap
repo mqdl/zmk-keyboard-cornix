@@ -157,14 +157,11 @@
             quick-tap-ms = <200>;
         };
 
-        // スクロール用センサーローテーション動作の定義
-
         scrl_enc: scrl_enc {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
-
-            tap-ms = <100>;
+            bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+            tap-ms = <50>;
         };
     };
 
