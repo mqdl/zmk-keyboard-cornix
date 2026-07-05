@@ -181,7 +181,7 @@
         };
 
         equal {
-            bindings = <&kp KP_EQUAL>;
+            bindings = <&kp JP_EQUAL>;
             key-positions = <9 10>;
         };
 
