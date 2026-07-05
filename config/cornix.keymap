@@ -157,13 +157,11 @@
             quick-tap-ms = <200>;
         };
 
-        // エンコーダー用のカスタムスクロール動作の定義（復活）
-
-        scroll_encoder: scroll_encoder {
+        // スクロール用センサーローテーション動作の定義
+        scrl_enc: scrl_enc {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
             bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
-
             tap-ms = <20>;
         };
     };
@@ -204,7 +202,7 @@
         };
 
         underscore {
-            bindings = <&kp JP_BSLH>;
+            bindings = <&kp JP_UNDERSCORE>;
             key-positions = <37 36>;
         };
 
@@ -220,34 +218,19 @@
         default_layer {
             display-name = "Base";
 
-            // ------------------------------------------------------------------------------------------------------------
-            // |   `   |  1  |  2  |  3   |  4   |  5   |                    |  6   |  7    |  8    |  9   |   0   |       |
-            // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                    |  Y   |  U    |  I    |  O   |   P   | BKSPC |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                    |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |  MUTE  |  |        |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //                | GUI | ALT  | CTRL | LOWER|  ENTER |  | SPACE | RAISE| CTRL  | ALT   | GUI  |
-
             bindings = <
-&lt 4 ESC         &kp Q         &kp W         &kp E  &kp R       &kp T                            &kp Y      &kp U       &kp I      &kp O     &kp P         &kp BACKSPACE
-&kp TAB           &kp A         &kp S         &kp D  &kp F       &kp G                            &kp H      &kp J       &kp K      &kp L     &kp SEMI      &kp ENTER
-&kp LEFT_SHIFT    &kp Z         &kp X         &kp C  &kp V       &kp B      &kp C_MUTE  &kp INT2  &kp N      &kp M       &kp COMMA  &kp DOT   &kp UP_ARROW  &kp SLASH
-&kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 2  &lt 3 INT5  &kp SPACE                        &kp SPACE  &lt 1 INT4  &mo 2      &kp LEFT  &kp DOWN      &kp RIGHT
+&lt 4 ESC         &kp Q         &kp W         &kp E  &kp R     &kp T                                                 &kp Y      &kp U       &kp I      &kp O     &kp P         &kp BACKSPACE
+&kp TAB           &kp A         &kp S         &kp D  &kp F     &kp G                                                 &kp H      &kp J       &kp K      &kp L     &kp SEMI      &kp ENTER
+&kp LEFT_SHIFT    &kp Z         &kp X         &kp C  &kp V     &kp B        &kp C_MUTE  &kp INT2                     &kp N      &kp M       &kp COMMA  &kp DOT   &kp UP_ARROW  &kp SLASH
+&kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 2  &kp INT5  &lt 3 SPACE                                           &kp SPACE  &lt 1 INT4  &mo 2      &kp LEFT  &kp DOWN      &kp RIGHT
             >;
 
-            sensor-bindings =
-                <&inc_dec_kp C_VOL_UP C_VOL_DN>,
-                <&scroll_encoder>;
+            // 左右のエンコーダーが個別かつ並列に「1番目のセンサー」として認識される既製品仕様へ適合
+            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         Num_layer {
             display-name = "num";
-
-            // ------------------------------------------------------------------------------------------------------------
-            // |   `   |  1  |  2  |  3   |  4   |  5   |                    |  6   |  7    |  8    |  9   |   0   |       |
-            // |  ESC  |  Q  |  W  |  E   |  R   |  T   |                    |  Y   |  U    |  I    |  O   |   P   | BKSPC |
-            // |  TAB  |  A  |  S  |  D   |  F   |  G   |                    |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |  MUTE  |  |        |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //                | GUI | ALT  | CTRL | LOWER|  ENTER |  | SPACE | RAISE| CTRL  | ALT   | GUI  |
 
             bindings = <
 &trans  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5                  &kp N6  &kp N7    &kp N8    &kp N9     &kp N0  &trans
@@ -256,43 +239,24 @@
 &trans  &trans  &trans  &trans  &trans  &trans                  &trans  &trans    &trans    &trans     &trans  &trans
             >;
 
-            sensor-bindings =
-                <&inc_dec_kp C_VOL_UP C_VOL_DN>,
-                <&scroll_encoder>;
+            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         Symbol_layer {
             display-name = "Symbols";
 
-            // TODO: Some binds are waiting for shifted keycode support.
-            // -------------------------------
-            // |        |  F1 |  F2 |  F3  |  F4  |  F5  |                    |  F6  |  F7   |  F8   |  F9  |  F10  |  F11  |
-            // |   `    |  1  |  2  |  3   |  4   |  5   |                    |  6   |  7    |  8    |  9   |   0   |  F12  |
-            // |        |  !  |  @  |  #   |  $   |  %   |                    |  ^   |  &    |  * |  (   |   )   |   |   |
-            // |        |  =  |  -  |  +   |  {   |  }   |        |  |        |  [   |  ]    |  ;    |  :   |   \   |       |
-            //                |     |      |      |      |        |  |        |      |       |       |      |
-
             bindings = <
-&trans  &kp EXCLAMATION  &kp JP_DQUOTE  &kp HASH  &kp DOLLAR  &kp PERCENT                  &kp JP_AMPERSAND  &kp JP_QUOTE  &kp JP_LPAREN    &kp JP_RPAREN    &kp MINUS         &kp JP_EQUAL
-&trans  &trans           &trans         &trans    &trans      &trans                       &kp JP_ASTERISK   &kp JP_CARET  &kp JP_LBRACKET  &kp JP_RBRACKET  &kp SEMI          &kp JP_COLON
-&trans  &trans           &trans         &trans    &trans      &trans       &trans  &trans  &kp JP_PLUS       &kp JP_TILDE  &kp JP_LBRACE    &kp JP_RBRACE    &kp JP_YEN        &kp JP_BACKQUOTE
-&trans  &trans           &trans         &trans    &trans      &trans                       &trans            &trans        &trans           &kp JP_AT        &kp JP_BACKQUOTE  &kp JP_UNDERSCORE
+&trans  &kp EXCLAMATION  &kp JP_DQUOTE  &kp HASH  &kp DOLLAR  &kp PERCENT                        &kp JP_AMPERSAND  &kp JP_QUOTE  &kp JP_LPAREN    &kp JP_RPAREN     &kp MINUS          &kp JP_EQUAL
+&trans  &trans           &trans         &trans    &trans      &trans                             &kp JP_ASTERISK   &kp JP_CARET  &kp JP_LBRACKET  &kp JP_RBRACKET   &kp SEMI           &trans
+&trans  &trans           &trans         &trans    &trans      &trans       &trans    &trans      &kp JP_PLUS       &kp JP_TILDE  &kp JP_LBRACE    &kp JP_RBRACE     &kp JP_COLON       &kp JP_BACKQUOTE
+&trans  &trans           &trans         &trans    &trans      &trans                             &trans            &trans        &trans           &kp JP_AT         &kp JP_BACKQUOTE   &kp JP_UNDERSCORE
             >;
 
-            sensor-bindings =
-                <&inc_dec_kp C_VOL_UP C_VOL_DN>,
-                <&scroll_encoder>;
+            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         Function_layer {
             display-name = "Func";
-
-            // ------------------------------------------------------------------------------------------------------------
-            // | BTCLR | BT1  | BT2  |  BT3  |  BT4  |  BT5 |                |      |      |       |      |       |       |
-            // |        | INS  | PSCR | GUI   |      |      |                | PGUP |      |   ^   |      |       |       |
-            // |        | ALT  | CTRL | SHIFT |      | CAPS |                | PGDN |  <-  |   v   |  ->  |  DEL  | BKSPC |
-            // |        | UNDO | CUT  | COPY  | PASTE |      |      |  |      |      |      |       |      |       |       |
-            //                |      |       |       |      |      |  |      |      |      |       |      |
 
             bindings = <
 &trans  &kp F1      &kp F2      &kp F3      &kp F4      &kp F5                      &kp F6      &kp F7      &kp F8      &kp F9      &kp F10      &kp F11
@@ -301,20 +265,11 @@
 &trans  &trans      &trans      &trans      &trans      &trans                      &trans      &trans      &trans      &trans      &trans       &trans
             >;
 
-            sensor-bindings =
-                <&inc_dec_kp C_VOL_UP C_VOL_DN>,
-                <&scroll_encoder>;
+            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
         BT_layer {
             display-name = "BT";
-
-            // ----------------------------------------------------------------------------------------------------------------------------
-            // | BTCLR  |  BT1    |  BT2    |   BT3   |   BT4   |   BT5   |                  |      |      |       |      |       |       |
-            // | moDEBUG| RGB_HUD | RGB_HUI | RGB_SAD | RGB_SAI | RGB_EFF |                  |      |      |       |      |       |       |
-            // | EXTPWR | RGB_BRD | RGB_BRI |         |         |         |                  |      |      |       |      |       |       |
-            // |        |         |         |         |         |         | RGB_TOG | |      |      |      |       |      |       |       |
-            //                    |         |         |         |         |         | |      |      |      |       |      |
 
             bindings = <
 &trans          &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4                   &trans  &trans  &trans  &trans          &trans          &trans
@@ -322,6 +277,8 @@
 &bt BT_CLR_ALL  &trans         &trans         &trans         &trans         &trans         &trans  &trans  &trans  &trans  &trans  &mkp LCLK       &mmv MOVE_UP    &mkp RCLK
 &trans          &trans         &trans         &trans         &trans         &trans                         &trans  &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
             >;
+
+            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
     };
 };
