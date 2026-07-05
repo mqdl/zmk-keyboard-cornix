@@ -32,12 +32,13 @@
 #define THUMBS LH1 LH0 RH0 RH1
 #define KEYS_T LH1 LH0 RH0 RH1
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 25
+
 #define JP_DQUOTE       AT                // "
 #define JP_AMPERSAND    CARET             // &
 #define JP_QUOTE        AMPERSAND         // '
 #define JP_EQUAL        UNDER             // =
 #define JP_CARET        EQUAL             // ^
-#define JP_YEN          0x89              // \
+#define JP_YEN          0x89              // ¥
 #define JP_PLUS         COLON             // +
 #define JP_TILDE        PLUS              // ~
 #define JP_PIPE         LS(0x89)          // |
@@ -157,10 +158,11 @@
             quick-tap-ms = <200>;
         };
 
+        // スクロール用センサーローテーション動作の定義
         scrl_enc: scrl_enc {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
             tap-ms = <100>;
         };
     };
