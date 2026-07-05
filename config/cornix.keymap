@@ -225,8 +225,8 @@
 &kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 2  &kp INT5  &lt 3 SPACE                                           &kp SPACE  &lt 1 INT4  &mo 2      &kp LEFT  &kp DOWN      &kp RIGHT
             >;
 
-            // 左右のエンコーダーが個別かつ並列に「1番目のセンサー」として認識される既製品仕様へ適合
-            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            // 左：ボリューム調整、右：スクロール（ご希望の本来の配置）
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
         };
 
         Num_layer {
@@ -239,7 +239,7 @@
 &trans  &trans  &trans  &trans  &trans  &trans                  &trans  &trans    &trans    &trans     &trans  &trans
             >;
 
-            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
         };
 
         Symbol_layer {
@@ -252,7 +252,7 @@
 &trans  &trans           &trans         &trans    &trans      &trans                             &trans            &trans        &trans           &kp JP_AT         &kp JP_BACKQUOTE   &kp JP_UNDERSCORE
             >;
 
-            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
         };
 
         Function_layer {
@@ -265,7 +265,7 @@
 &trans  &trans      &trans      &trans      &trans      &trans                      &trans      &trans      &trans      &trans      &trans       &trans
             >;
 
-            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
         };
 
         BT_layer {
@@ -278,7 +278,15 @@
 &trans          &trans         &trans         &trans         &trans         &trans                         &trans  &trans  &trans  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
             >;
 
-            sensor-bindings = <&scrl_enc>, <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
         };
     };
+};
+
+/* * スクロール入力の基準移動量を明示的にオーバーライド
+ * ZMKの内部計算でスクロール量が0になる現象を防ぎます
+ */
+&msc {
+    time-to-max-speed-ms = <20>;
+    acceleration-exponent = <0>;
 };
