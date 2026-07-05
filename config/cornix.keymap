@@ -31,7 +31,7 @@
 #define KEYS_R RT0 RT1 RT2 RT3 RT4 RT5 RM0 RM1 RM2 RM3 RM4 RM5 RB0 RB1 RB2 RB3 RB4 RB5  // right hand
 #define THUMBS LH1 LH0 RH0 RH1
 #define KEYS_T LH1 LH0 RH0 RH1
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 15
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 25
 #define JP_DQUOTE       AT                // "
 #define JP_AMPERSAND    CARET             // &
 #define JP_QUOTE        AMPERSAND         // '
@@ -157,14 +157,10 @@
             quick-tap-ms = <200>;
         };
 
-        // スクロール用センサーローテーション動作の定義
-
-        scrl_enc: scrl_enc {
+        scroll_encoder: scroll_encoder {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
-            bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
-
-            tap-ms = <20>;
+            bindings = <&msc SCRL_RIGHT>, <&msc SCRL_LEFT>;
         };
     };
 
@@ -226,9 +222,7 @@
 &kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &mo 2  &lt 3 INT5  &kp SPACE                        &kp SPACE  &lt 1 INT4  &mo 2      &kp LEFT  &kp DOWN      &kp RIGHT
             >;
 
-            // 左：ボリューム調整、右：スクロール（ご希望の本来の配置）
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>, <&scrl_enc>;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &scroll_encoder>;
         };
 
         Num_layer {
@@ -281,11 +275,3 @@
     };
 };
 
-/* * スクロール入力の基準移動量を明示的にオーバーライド
- * ZMKの内部計算でスクロール量が0になる現象を防ぎます
- */
-
-&msc {
-    time-to-max-speed-ms = <20>;
-    acceleration-exponent = <0>;
-};
