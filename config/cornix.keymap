@@ -215,6 +215,20 @@
             bindings = <&kp QUESTION>;
             key-positions = <6 7>;
         };
+
+        pointerref {
+            bindings = <&pointer_macro>;
+            key-positions = <18 19>;
+        };
+    };
+
+    macros {
+        pointer_macro: new_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp KP_MINUS &kp GT>;
+            label = "NEW_MACRO";
+        };
     };
 
     keymap {
